@@ -1,9 +1,10 @@
 const express = require("express");
 
-const app = express();
 const port = process.env.PORT || 5000;
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
-const dotenv = require('dotenv');
+require('dotenv').config();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -15,16 +16,25 @@ app.use(express.json());
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://taskAdmin:<password>@cluster0.ynsqw.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  console.log('connected')
-  // perform actions on the collection object
-  client.close();
-});
 
+const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.USER_PASS}@cluster0.ynsqw.mongodb.net/?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+async function run(){
+    try{
+        await client.connect();
+        const taskCollection  = client.db('taskTool').collection('task');
+
+        app.get('/task', async(req, res)=>{
+            const result = await taskCollection.find().toArray()
+            res.send(result);
+        })
+
+    } finally{
+
+    }
+}
+run().catch(console.dir);
 
 
 
