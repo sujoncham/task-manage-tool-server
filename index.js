@@ -65,12 +65,18 @@ async function run(){
             res.send(result);
         });
 
+        app.delete('/task/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = {_id:ObjectId(id)};
+            const result = await taskCollection.deleteOne(query);
+            res.send(result);
+        })
+
     } finally{
 
     }
 }
 run().catch(console.dir);
-
 
 
 app.get('/', (req, res)=>{
@@ -79,4 +85,4 @@ app.get('/', (req, res)=>{
 
 app.listen(port, ()=>{
     console.log('My port is', port);
-})
+});
