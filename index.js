@@ -27,6 +27,11 @@ async function run(){
             const task = await taskCollection.find(query).toArray();
             res.send(task);
         });
+        app.get('/task/reviewed/', async(req, res)=>{
+            const query = {review:'completed'};
+            const task = await taskCollection.find(query).toArray();
+            res.send(task);
+        });
 
         app.post('/task', async (req, res)=>{
             const newTask = req.body;
@@ -42,6 +47,9 @@ async function run(){
             const updatedDoc = {
                 $set: {
                     title: taskData.title,
+                    note: taskData.note,
+                    date: taskData.date,
+                    startDate: taskData.startDate,
                 }
             }
             const result = await taskCollection.updateOne(filter, updatedDoc, options);
@@ -49,11 +57,23 @@ async function run(){
         });
 
         app.put('/task/completed/:id', async(req, res)=>{
+            
             const id = req.params.id;
             const filter = {_id: ObjectId(id)};
             const updatedDoc = {
                 $set: {
-                    role: 'completed',
+                    status: req.body.status,
+                },
+            }
+            const result = await taskCollection.updateOne(filter, updatedDoc);
+            res.send(result);
+        });
+        app.put('/task/reviewed/:id', async(req, res)=>{
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const updatedDoc = {
+                $set: {
+                    review: 'completed',
                 },
             }
             const result = await taskCollection.updateOne(filter, updatedDoc);
