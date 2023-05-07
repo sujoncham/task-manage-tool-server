@@ -8,7 +8,7 @@ const taskSchema = mongoose.Schema({
     },
     note: {
         type: String,
-        required: true,
+        default: '',
     }, 
     startDate: {
         type: Date,

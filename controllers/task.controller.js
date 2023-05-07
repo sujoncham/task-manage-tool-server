@@ -22,7 +22,7 @@ exports.completedTask = async(req, res, next)=>{
         const tasks = await Task.find({status: 'completed'});
         return res.status(200).json({
             status: "success",
-            message: "task is created successfully",
+            message: "task is Completed successfully",
             data: tasks,
         })
     } catch (error) {
@@ -38,7 +38,7 @@ exports.reviewTask = async(req, res, next)=>{
         const tasks = await Task.find({review: 'completed'});
         return res.status(200).json({
             status: "success",
-            message: "task is created successfully",
+            message: "task is QC Done successfully",
             data: tasks,
         })
     } catch (error) {
